@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from jsonschema import validate
+from utils.validate import jsonvalid
 
 #Models
 from models.moviemodel import MovieModel
@@ -28,19 +29,11 @@ def get_onemovie(id):
     
 @main.route('/add', methods=['POST'])
 def add_movie():
-    try:
-        # Describe what kind of json you expect.
-        schema = {
-                    "type" : "object",
-                    "properties" : {
-                        "title" : {"type" : "string"},
-                        "duration" : {"type" : "int"},
-                        "released" : {"type" : "date"},
-                    },
-                }
-        title=request.json['title']
-        duration=int(request.json['duration'])
-        released=request.json['released']
+    try:    
+        jsonvalid.validation(request.json)
+        # title=request.json['title']
+        # duration=int(request.json['duration'])
+        # released=request.json['released']
         return jsonify({})
     except Exception as ex:
         return jsonify({'message': str(ex)}),500
